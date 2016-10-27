@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <string>
 
 #include "car.hpp"
 
@@ -10,22 +9,16 @@ class Lane
 public:
 	Lane() = default;
 
-	Lane(int road_length) :
-		road_length(road_length) 
-		{}
-
-	void update(int const recommended_speed, int const safe_distance);
-	void print() const;
-
 	std::vector<Car> const& get_cars() const;
-	std::vector<int> const& get_coordinates() const;
+	std::vector<size_t> const& get_coordinates() const;
 
-	void add_car(Car const &car, int coordinate);
+	void update_car(size_t road_length, 
+		size_t const recommended_speed, 
+		size_t const safe_distance,
+		size_t const index);
+	void add_car(Car const &car, size_t coordinate = 0);
 
 private:
 	std::vector<Car> cars;
-	std::vector<int> coordinates;
-
-	int road_length;
-	std::string name;
+	std::vector<size_t> coordinates;
 };

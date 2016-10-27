@@ -1,26 +1,23 @@
 #include <iostream>
 #include "lane.hpp"
 
-void Lane::update(int const recommended_speed, int const safe_distance)
+void Lane::update_car(size_t road_length, size_t const recommended_speed, size_t const safe_distance, size_t const index)
 {
 	if (cars.size() == 0)
+	{
 		return;
+	}
+	if (index == 0)
+	{
 	coordinates[0] += cars[0].update(road_length - coordinates[0], 0, 1, 
 					recommended_speed, safe_distance);
-	for (size_t i = 1; i < cars.size(); ++i)
-	{
-		coordinates[i] += cars[i].update(coordinates[i - 1] - coordinates[i] - cars[i - 1].get_size(), cars[i - 1].get_speed(), 1,
-											recommended_speed, safe_distance);
 	}
-}
-
-void Lane::print() const
-{
-	for (size_t i = 0; i < coordinates.size(); ++i)
+	else
 	{
-		std::cout << coordinates[i] << std::endl;
+		coordinates[index] += cars[index].update(coordinates[index - 1] - coordinates[index]
+							- cars[index - 1].get_size(), cars[index - 1].get_speed(), 1,
+							recommended_speed, safe_distance);
 	}
-	std::cout << std::endl;
 }
 
 std::vector<Car> const& Lane::get_cars() const
@@ -28,12 +25,12 @@ std::vector<Car> const& Lane::get_cars() const
 	return cars;
 }
 
-std::vector<int> const& Lane::get_coordinates() const
+std::vector<size_t> const& Lane::get_coordinates() const
 {
 	return coordinates;
 }
 
-void Lane::add_car(Car const &car, int coordinate)
+void Lane::add_car(Car const &car, size_t coordinate)
 {
 	cars.push_back(car);
 	coordinates.push_back(coordinate);

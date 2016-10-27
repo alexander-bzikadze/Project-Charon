@@ -1,18 +1,21 @@
 #include "lane.hpp"
 #include "side.hpp"
-#include "one_lane_side.hpp"
 
 int main()
 {
-	auto r = One_lane_side(1000);
+	auto r = Side(1000, 4);
+	r.add_to_lane(Car(), 0);
+	r.update();
+	r.print();
 	for (int i = 0; i < 10; ++i)
 	{
-		r.add_to_lane(Car(), 0);
-		r.update();
+		for (int j = 0; j < 4; ++j)
+			if (r.can_add_to_lane(j))
+				r.add_to_lane(Car(), j);
 		r.print();
+		r.update();
 	}
-	r.print();
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
 		r.update();
 		r.print();

@@ -5,18 +5,18 @@ class Car
 public:
 	Car() = default;
 
-	int update(int nearest_barrier, 
-		int nearest_barrier_speed,
-		int update_frequency,
-		int recommended_speed,
-		int safe_distance);
+	size_t update(size_t nearest_barrier, 
+		size_t nearest_barrier_speed,
+		size_t update_frequency,
+		size_t recommended_speed,
+		size_t safe_distance);
 
-	int get_speed() const;
-	int get_size() const;
+	size_t get_speed() const;
+	size_t get_size() const;
 
 private:
-	constexpr static int critical_distance = 1;
-	const int car_size = 5;
+	constexpr static size_t critical_distance = 1;
+	const size_t car_size = 5;
 
-	int speed; // in metres per second
+	size_t speed; // in metres per second
 };
