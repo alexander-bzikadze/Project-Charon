@@ -21,13 +21,6 @@ Side::Side(size_t road_length, size_t lane_number,
 void Side::update()
 {
 	size_t *coordinates_of_cars_to_update = new size_t[lanes.size()]();
-	// struct Compare_for_min_queue
-	// {
-	// 	bool operator()(std::pair<size_t,size_t> const l, std::pair<size_t, size_t> const r)  
-	// 	{  
-	// 		return l > r;  
-	// 	}
-	// };
 	std::priority_queue<std::pair<size_t, size_t>> cars_to_update;
 	for (size_t i = 0; i < lanes.size(); ++i)
 	{
@@ -77,7 +70,9 @@ void Side::print() const
 
 bool Side::can_add_to_lane(size_t lane_number) const
 {
-	return !lanes[lane_number].get_coordinates().size() || !(lanes[lane_number].get_coordinates()[lanes[lane_number].get_coordinates().size() - 1] < lanes[lane_number].get_cars()[lanes[lane_number].get_coordinates().size() - 1].get_size() + 1);
+	return !lanes[lane_number].get_coordinates().size() ||
+		 !(lanes[lane_number].get_coordinates()[lanes[lane_number].get_coordinates().size() - 1]
+		 < lanes[lane_number].get_cars()[lanes[lane_number].get_coordinates().size() - 1].get_size() + 1);
 }
 
 void Side::add_to_lane(Car const& car, size_t lane_number)

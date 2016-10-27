@@ -1,6 +1,8 @@
 #include "lane.hpp"
 #include "side.hpp"
 
+#include <iostream>
+
 int main()
 {
 	auto r = Side(1000, 4);

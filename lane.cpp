@@ -1,4 +1,3 @@
-#include <iostream>
 #include "lane.hpp"
 
 void Lane::update_car(size_t road_length, size_t const recommended_speed, size_t const safe_distance, size_t const index)

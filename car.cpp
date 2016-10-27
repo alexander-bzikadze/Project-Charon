@@ -44,3 +44,8 @@ size_t Car::get_size() const
 {
 	return car_size;
 }
+
+size_t Car::get_coordinate() const
+{
+	return coordinate;
+}

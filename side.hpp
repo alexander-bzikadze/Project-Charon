@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ostream>
 
 #include "lane.hpp"
 #include "car.hpp"
