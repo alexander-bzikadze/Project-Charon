@@ -25,6 +25,8 @@ public:
 private:
 	std::vector<Lane> lanes;
 
+	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;
+
 	const size_t road_length;
 	const size_t recommended_speed;
 	const size_t safe_distance;
