@@ -7,6 +7,11 @@ Car::Car(size_t coordinate) :
 	coordinate(coordinate)
 	{}
 
+Car::Car(Car const& car) :
+	coordinate(car.coordinate),
+	speed(car.speed)
+	{}
+
 void Car::update(size_t nearest_barrier_coordinate, 
 		size_t nearest_barrier_speed,
 		size_t update_frequency,

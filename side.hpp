@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <ostream>
+#include <queue>
 
 #include "lane.hpp"
 #include "car.hpp"
@@ -19,16 +20,19 @@ public:
 	void update();
 	void print() const;
 
+	Car const *get_car(size_t i, size_t j) const;
+
 	bool can_add_to_lane(size_t lane_number) const;
 	void add_to_lane(Car const& car, size_t lane_number);
 
 private:
-	std::vector<Lane> lanes;
-
 	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;
 
 	const size_t road_length;
 	const size_t recommended_speed;
 	const size_t safe_distance;
 
+	std::vector<Lane> lanes;
+	std::vector<size_t> coordinates_of_cars_to_update;
+	std::priority_queue<std::pair<size_t, size_t>> cars_to_update;
 };

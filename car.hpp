@@ -5,6 +5,8 @@ class Car
 public:
 	Car() = default;
 	Car(size_t coordinate);
+	Car(Car const& car);
+	~Car() = default;
 
 	void update(size_t nearest_barrier, 
 		size_t nearest_barrier_speed,
