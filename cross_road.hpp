@@ -1,22 +1,25 @@
 #pragma once
 
-#include "side.hpp"
-#include "lane.hpp"
-#include "car.hpp"
-
 #include <vector>
 #include <unordered_map>
 #include <queue>
+
+#include "side.hpp"
+#include "traffic_light.hpp"
+#include "lane.hpp"
+#include "car.hpp"
 
 class Cross_road
 {
 public:
 	bool can_go(Lane* const original_lane, Side* const new_side);
 
-	void go(Car const& car, Lane const& original_lane, Side const& new_side);
+	void go(Car* car, Lane* original_lane, Side* const new_side);
+
+	void update();
 
 private:
-	//traffic_light
+	Traffic_light traffic_light;
 
 	// std::vector<Side*> incoming_sides;
 	// std::vector<Side*> outgoing_sides;
@@ -28,7 +31,5 @@ private:
 	std::unordered_map<Lane*, std::unordered_map<Side*, Lane*>> lane_connections;
 
 	std::queue<size_t> number_of_added_cars;
-	std::vector<std::pair<std::pair<Lane*,Lane*>, size_t>> cars_in_crossroad_with_time;
+	std::vector<std::pair<std::pair<Lane*, Lane*>, Car*>> cars_in_crossroad_with_time;
 };
-
-// size_t t = 100; while (t-- > -1); - в 64 битной size_t размера 8 байт ==> -1 как 32-битный литерал приведется к самому большому 64-битному числу.
