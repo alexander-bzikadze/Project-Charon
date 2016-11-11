@@ -27,7 +27,7 @@ void Side::update()
 	for (size_t i = 0; i < lanes.size(); ++i)
 	{
 		if (lanes[i].get_cars().size())
-			cars_to_update.push({lanes[i].get_cars()[0].get_coordinate(), i});
+			cars_to_update.push({lanes[i].get_cars()[0]->get_coordinate(), i});
 	}
 	while (!cars_to_update.empty())
 	{
@@ -39,7 +39,7 @@ void Side::update()
 		coordinates_of_cars_to_update[lane_index]++;
 		if (coordinates_of_cars_to_update[lane_index] != lanes[lane_index].get_cars().size())
 		{
-			cars_to_update.push({lanes[lane_index].get_cars()[coordinates_of_cars_to_update[lane_index]].get_coordinate(), lane_index});
+			cars_to_update.push({lanes[lane_index].get_cars()[coordinates_of_cars_to_update[lane_index]]->get_coordinate(), lane_index});
 		}
 	}
 }
@@ -57,7 +57,7 @@ void Side::print() const
 		{
 			if (i < lanes[j].get_cars().size())
 			{
-				std::cout << lanes[j].get_cars()[i].get_coordinate() << " ";
+				std::cout << lanes[j].get_cars()[i]->get_coordinate() << " ";
 			}
 			else
 			{
@@ -72,11 +72,11 @@ void Side::print() const
 bool Side::can_add_to_lane(size_t lane_number) const
 {
 	return !lanes[lane_number].get_cars().size() ||
-		 !(lanes[lane_number].get_cars()[lanes[lane_number].get_cars().size() - 1].get_coordinate()
-		 < lanes[lane_number].get_cars()[lanes[lane_number].get_cars().size() - 1].get_size() + 1);
+		 !(lanes[lane_number].get_cars()[lanes[lane_number].get_cars().size() - 1]->get_coordinate()
+		 < lanes[lane_number].get_cars()[lanes[lane_number].get_cars().size() - 1]->get_size() + 1);
 }
 
-void Side::add_to_lane(Car const& car, size_t lane_number)
+void Side::add_to_lane(Car* car, size_t lane_number)
 {
 	lane_number = std::min(lane_number, lanes.size() - 1);
 	lanes[lane_number].add_car(car);
@@ -115,8 +115,7 @@ void Side::add_to_lane(Car const& car, size_t lane_number)
 // 	return true;
 // }
 
-Car const * Side::get_car(size_t i, size_t j) const
+Car const* Side::get_car(size_t i, size_t j) const
 {
-	Car const * pointer = &lanes[i].get_cars()[j];
-	return pointer;
+	return lanes[i].get_cars()[j];
 }

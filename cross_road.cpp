@@ -5,6 +5,26 @@
 
 using namespace std;
 
+Cross_road::Cross_road(size_t time_to_cross_crossroad) : 
+	time_to_cross_crossroad(time_to_cross_crossroad)
+{
+	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
+	{
+		number_of_added_cars.push(0);
+	}
+}
+
+Cross_road::Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light) : 
+	traffic_light(traffic_light) ,
+	time_to_cross_crossroad(time_to_cross_crossroad)
+{
+	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
+	{
+		number_of_added_cars.push(0);
+	}
+}
+
+
 bool Cross_road::can_go(Lane* const original_lane, Side* const new_side)
 {
 	if (lane_connections.at(original_lane).find(new_side) == lane_connections.at(original_lane).end())

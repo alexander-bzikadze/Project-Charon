@@ -7,6 +7,13 @@ Traffic_light::Traffic_light(size_t max_status) :
 	current_status(0)
 	{}
 
+Traffic_light::Traffic_light(Traffic_light const& copied):
+	max_status(copied.max_status) ,
+	current_status(copied.current_status)
+{
+	road_status = copied.road_status;
+}
+
 vector <pair< Lane*, Lane*>> Traffic_light::get_main_roads()
 {
 	vector <pair <Lane*, Lane*>> main_roads;

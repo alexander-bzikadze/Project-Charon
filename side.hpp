@@ -20,10 +20,10 @@ public:
 	void update();
 	void print() const;
 
-	Car const *get_car(size_t i, size_t j) const;
+	Car const* get_car(size_t i, size_t j) const;
 
 	bool can_add_to_lane(size_t lane_number) const;
-	void add_to_lane(Car const& car, size_t lane_number);
+	void add_to_lane(Car* car, size_t lane_number);
 
 private:
 	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;

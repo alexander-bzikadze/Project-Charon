@@ -12,6 +12,10 @@
 class Cross_road
 {
 public:
+	Cross_road() = default;
+	Cross_road(size_t time_to_cross_crossroad);
+	Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light);
+
 	bool can_go(Lane* const original_lane, Side* const new_side);
 
 	void go(Car* car, Lane* original_lane, Side* const new_side);
@@ -26,7 +30,7 @@ private:
 
 	std::unordered_map<Lane*, size_t> number_of_lanes_in_clock_order;
 
-	const size_t time_to_cross_crossroad = 3;
+	const size_t time_to_cross_crossroad = 0;
 
 	std::unordered_map<Lane*, std::unordered_map<Side*, Lane*>> lane_connections;
 
