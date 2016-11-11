@@ -5,8 +5,7 @@
 
 using namespace std;
 
-Cross_road::Cross_road(size_t time_to_cross_crossroad) : 
-	time_to_cross_crossroad(time_to_cross_crossroad)
+Cross_road::Cross_road(size_t time_to_cross_crossroad)
 {
 	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
 	{
@@ -15,8 +14,7 @@ Cross_road::Cross_road(size_t time_to_cross_crossroad) :
 }
 
 Cross_road::Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light) : 
-	traffic_light(traffic_light) ,
-	time_to_cross_crossroad(time_to_cross_crossroad)
+	traffic_light(traffic_light)
 {
 	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
 	{
@@ -60,7 +58,7 @@ bool Cross_road::can_go(Lane* const original_lane, Side* const new_side)
 		}
 		return result;
 	}
-	return traffic_light_result != 0;
+	return traffic_light_result == 0;
 }
 
 void Cross_road::go(Car* car, Lane* original_lane, Side* const new_side)

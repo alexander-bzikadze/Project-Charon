@@ -4,6 +4,8 @@
 
 #include "side.hpp"
 
+using namespace std;
+
 Side::Side(size_t road_length, size_t lane_number) :
 	road_length(road_length), 
 	recommended_speed(20),
@@ -27,7 +29,9 @@ void Side::update()
 	for (size_t i = 0; i < lanes.size(); ++i)
 	{
 		if (lanes[i].get_cars().size())
+		{
 			cars_to_update.push({lanes[i].get_cars()[0]->get_coordinate(), i});
+		}
 	}
 	while (!cars_to_update.empty())
 	{
@@ -80,6 +84,11 @@ void Side::add_to_lane(Car* car, size_t lane_number)
 {
 	lane_number = std::min(lane_number, lanes.size() - 1);
 	lanes[lane_number].add_car(car);
+}
+
+vector<Lane>& Side::get_lanes()
+{
+	return lanes;
 }
 
 // bool Side::can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const

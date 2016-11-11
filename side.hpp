@@ -25,6 +25,8 @@ public:
 	bool can_add_to_lane(size_t lane_number) const;
 	void add_to_lane(Car* car, size_t lane_number);
 
+	std::vector<Lane>& get_lanes();
+
 private:
 	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;
 
