@@ -16,6 +16,7 @@ Traffic_light::Traffic_light(Traffic_light const& copied) :
 
 Traffic_light::Traffic_light(size_t max_status, std::vector <std::unordered_map <Lane*, std::unordered_map <Lane*, size_t>>> road_status) :
 	max_status(max_status) ,
+	current_status(0) ,
 	road_status(road_status)
 	{}
 

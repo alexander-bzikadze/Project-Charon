@@ -8,7 +8,6 @@
 #include "traffic_light.hpp"
 #include "lane.hpp"
 #include "car.hpp"
-#include "cross_road_builder.hpp"
 
 class Cross_road
 {
@@ -23,8 +22,11 @@ public:
 
 	void update();
 
+	void standard_build(std::vector<Side*> sides);
+
 private:
 	Traffic_light traffic_light;
+	bool builded;
 
 	// std::vector<Side*> incoming_sides;
 	// std::vector<Side*> outgoing_sides;
@@ -35,16 +37,4 @@ private:
 
 	std::queue<size_t> number_of_added_cars;
 	std::vector<std::pair<std::pair<Lane*, Lane*>, Car*>> cars_in_crossroad_with_time;
-
-	class Standard_builder : Cross_road_builder
-	{
-	public:
-		Standard_builder(Cross_road* builded);
-
-		void build(std::vector<Side*> sides) override;
-
-	private:
-		constexpr static size_t expected = 8;
-		Cross_road* builded;
-	};
 };
