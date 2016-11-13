@@ -134,6 +134,8 @@ void Cross_road::standard_build(vector<Side*> sides)
 			road_status[current_road_status][current_lane][current_lane_destination] = 0;
 			road_status[anti_current_road_status][current_lane][current_lane_destination] = 2;
 		}
+		this->outgoing_sides.push_back(sides[i + 1]);
+		sides[i]->build(this);
 	}
 	size_t added_lanes = 0;
 	for (size_t i = 0; i < expected; ++i)

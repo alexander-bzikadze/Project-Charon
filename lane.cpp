@@ -8,8 +8,8 @@ void Lane::update_car(size_t road_length, size_t const recommended_speed, size_t
 	}
 	if (index == 0)
 	{
-	cars[0]->update(road_length, 0, 1, 
-		recommended_speed, safe_distance);
+		cars[0]->update(road_length, 0, 1, 
+			recommended_speed, safe_distance);
 	}
 	else
 	{
@@ -27,4 +27,12 @@ std::vector<Car*> const& Lane::get_cars() const
 void Lane::add_car(Car* car)
 {
 	cars.push_back(car);
+}
+
+Car* Lane::go_car()
+{
+	Car* went_car = cars[0];
+	cars[0]->go();
+	cars.erase(cars.begin(), cars.begin() + 1);
+	return went_car;
 }

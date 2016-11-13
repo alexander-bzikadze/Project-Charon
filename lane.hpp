@@ -4,6 +4,8 @@
 
 #include "car.hpp"
 
+
+
 class Lane
 {
 public:
@@ -16,6 +18,7 @@ public:
 		size_t const safe_distance,
 		size_t const index);
 	void add_car(Car* car);
+	Car* go_car();
 
 private:
 	std::vector<Car*> cars;

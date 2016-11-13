@@ -4,23 +4,24 @@
 #include <unordered_map>
 #include <queue>
 
+#include "icross_road.hpp"
 #include "side.hpp"
 #include "traffic_light.hpp"
 #include "lane.hpp"
 #include "car.hpp"
 
-class Cross_road
+class Cross_road : public ICross_road
 {
 public:
 	Cross_road() = default;
 	Cross_road(size_t time_to_cross_crossroad);
 	Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light);
 
-	bool can_go(Lane* const original_lane, Side* const new_side);
+	bool can_go(Lane* const original_lane, Side* const new_side) override;
 
-	void go(Car* car, Lane* original_lane, Side* const new_side);
+	void go(Car* car, Lane* original_lane, Side* const new_side) override;
 
-	void update();
+	void update() override;
 
 	void standard_build(std::vector<Side*> sides);
 
@@ -29,7 +30,7 @@ private:
 	bool builded;
 
 	// std::vector<Side*> incoming_sides;
-	// std::vector<Side*> outgoing_sides;
+	std::vector<Side*> outgoing_sides;
 
 	std::unordered_map<Lane*, size_t> number_of_lanes_in_clock_order;
 

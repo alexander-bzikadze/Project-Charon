@@ -3,11 +3,19 @@
 
 #include "car.hpp"
 
+using namespace std;
+
 Car::Car(size_t coordinate) :
 	coordinate(coordinate)
 	{}
 
+Car::Car(vector<Side*> const& path) :
+	path(path) ,
+	coordinate(0)
+	{}
+
 Car::Car(Car const& car) :
+	path(car.path) ,
 	coordinate(car.coordinate),
 	speed(car.speed)
 	{}
@@ -58,4 +66,24 @@ size_t Car::get_size() const
 size_t Car::get_coordinate() const
 {
 	return coordinate;
+}
+
+Side* Car::where_to_go() const
+{
+	if (path.size() == 0)
+	{
+		//throw something
+		return nullptr;
+	}
+	return path[path.size() - 1];
+}
+
+void Car::go()
+{
+	if (path.size() == 0)
+	{
+		//throw something
+		return;
+	}
+	path.pop_back();
 }

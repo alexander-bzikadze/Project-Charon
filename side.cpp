@@ -3,22 +3,27 @@
 #include <algorithm>
 
 #include "side.hpp"
+#include "cross_road.hpp"
 
 using namespace std;
 
 Side::Side(size_t road_length, size_t lane_number) :
+	builded(false) ,
 	road_length(road_length), 
 	recommended_speed(20),
 	safe_distance(20),
+	destination(nullptr) ,
 	lanes(lane_number),
 	coordinates_of_cars_to_update(lane_number)
 	{}
 
 Side::Side(size_t road_length, size_t lane_number, 
 		size_t recommended_speed, size_t safe_distance) :
+	builded(false) ,
 	road_length(road_length), 
 	recommended_speed(recommended_speed),
 	safe_distance(safe_distance),
+	destination(nullptr) ,
 	lanes(lane_number),
 	coordinates_of_cars_to_update(lane_number)
 	{}
@@ -38,8 +43,19 @@ void Side::update()
 		auto first_car_coordinates = cars_to_update.top();
 		cars_to_update.pop();
 		size_t lane_index = first_car_coordinates.second;
-		lanes[lane_index].update_car(road_length, recommended_speed, safe_distance, 
+		if (builded && first_car_coordinates.first + safe_distance > road_length 
+			&& destination->can_go(&lanes[lane_index]
+			, lanes[lane_index].get_cars()[coordinates_of_cars_to_update[lane_index]]->where_to_go()))
+		{
+			Side* cars_path_edge = lanes[lane_index].get_cars()[coordinates_of_cars_to_update[lane_index]]->where_to_go();
+			Car* car_to_go = lanes[lane_index].go_car();
+			destination->go(car_to_go, &lanes[lane_index], cars_path_edge);
+		}
+		else
+		{
+			lanes[lane_index].update_car(road_length, recommended_speed, safe_distance, 
 								coordinates_of_cars_to_update[lane_index]);
+		}
 		coordinates_of_cars_to_update[lane_index]++;
 		if (coordinates_of_cars_to_update[lane_index] != lanes[lane_index].get_cars().size())
 		{
@@ -89,6 +105,17 @@ void Side::add_to_lane(Car* car, size_t lane_number)
 vector<Lane>& Side::get_lanes()
 {
 	return lanes;
+}
+
+void Side::build(ICross_road* destination)
+{
+	if (builded)
+	{
+		//throw something
+		return;
+	}
+	this->destination = destination;
+	builded = true;
 }
 
 // bool Side::can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const
