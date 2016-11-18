@@ -15,7 +15,7 @@ int main()
 	t1();
 	t2();
 	t3();
-	// t4();
+	t4();
 	t5();
 	return 0;
 }
@@ -48,7 +48,7 @@ void t5()
 			cr[i]->update();
 		for (int i = 0; i < cd.size(); ++i)
 			cd[i]->update();
-		s[6]->print();
+		// s[6]->print();
 	}
 }
 
@@ -92,7 +92,7 @@ void t4()
 			cr[i]->update();
 		for (int i = 0; i < cd.size(); ++i)
 			cd[i]->update();
-		s[2]->print();
+		// s[2]->print();
 	}
 }
 
@@ -165,14 +165,14 @@ void t1()
 	auto p = unique_ptr<Car>(new Car());
 	r.add_to_lane(move(p), 0);
 	r.update();
-	// r.print();
+	r.print();
 	for (int i = 0; i < 10; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		if (r.can_add_to_lane(j)){
 			r.add_to_lane(unique_ptr<Car>(new Car()), j);
 		}
-		// r.print();
+		r.print();
 		r.update();
 	}
 	for (int i = 0; i < v.size(); ++i)
@@ -182,7 +182,7 @@ void t1()
 	for (int i = 0; i < 20; ++i)
 	{
 		r.update();
-		// r.print();
+		r.print();
 	}
-	// r.print();
+	r.print();
 }

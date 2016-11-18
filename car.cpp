@@ -48,13 +48,9 @@ void Car::update(size_t nearest_barrier_coordinate,
 	}
 	size_t passed_distance = 0;
 	size_t previous_speed = speed;
-	if (nearest_barrier <= safe_distance)
+	if (nearest_barrier <= 2 * safe_distance)
 	{
 		speed = (nearest_barrier / update_frequency) - previous_speed;
-	}
-	else if (nearest_barrier <= safe_distance * 2)
-	{
-		speed = 2 * (nearest_barrier - safe_distance) / update_frequency - previous_speed;
 	}
 	else
 	{
