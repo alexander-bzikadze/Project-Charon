@@ -16,16 +16,6 @@ Cross_road::Cross_road(size_t time_to_cross_crossroad) :
 	}
 }
 
-Cross_road::Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light) : 
-	traffic_light(traffic_light) ,
-	builded(false)
-{
-	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
-	{
-		number_of_cars_in_cross_road.push(0);
-	}
-}
-
 
 bool Cross_road::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
 {
@@ -39,8 +29,8 @@ bool Cross_road::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Sid
 	{
 		return false;
 	}
-	int8_t traffic_light_result = traffic_light.get_status(original_lane, new_lane);
-	if (traffic_light_result == 1)
+	Traffic_light::Availiable_lights traffic_light_result = traffic_light.get_status(original_lane, new_lane);
+	if (traffic_light_result == Traffic_light::Availiable_lights::secondary_road)
 	{
 		std::vector<std::pair<std::shared_ptr<Lane>, std::shared_ptr<Lane>>> const main_roads = traffic_light.get_active_roads();
 		// std::vector<std::pair<Lane*, Lane*>> const main_roads;
@@ -66,7 +56,7 @@ bool Cross_road::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Sid
 		}
 		return result;
 	}
-	return traffic_light_result == 0;
+	return traffic_light_result == Traffic_light::Availiable_lights::main_road;
 }
 
 void Cross_road::go(unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
@@ -115,7 +105,7 @@ void Cross_road::standard_build(vector<std::shared_ptr<Side>> sides)
 		}
 	}
 	size_t max_status = 2;
-	std::vector <std::unordered_map <shared_ptr<Lane>, std::unordered_map <shared_ptr<Lane>, size_t>>> road_status;
+	std::vector <std::unordered_map <shared_ptr<Lane>, std::unordered_map <shared_ptr<Lane>, Traffic_light::Availiable_lights>>> road_status;
 	road_status.resize(max_status);
 	for (size_t i = 0; i < expected; i += 2)
 	{
@@ -125,20 +115,19 @@ void Cross_road::standard_build(vector<std::shared_ptr<Side>> sides)
 		shared_ptr<Lane> right = sides[i]->get_lanes()[sides[i]->get_lanes().size() - 1];
 		shared_ptr<Lane> destination_of_left = sides[(i + 5) % expected]->get_lanes()[0];
 		shared_ptr<Lane> destination_of_right = sides[(i + 1) % expected]->get_lanes()[sides[i]->get_lanes().size() - 1];
-		// road_status[0][left]
 		this->lane_connections[left][sides[(i + 5) % expected]] = destination_of_left;
 		this->lane_connections[right][sides[(i + 1) % expected]] = destination_of_right;
-		road_status[current_road_status][left][destination_of_left] = 1;
-		road_status[current_road_status][right][destination_of_right] = 1;
-		road_status[anti_current_road_status][left][destination_of_left] = 2;
-		road_status[anti_current_road_status][right][destination_of_right] = 2;
+		road_status[current_road_status][left][destination_of_left] = Traffic_light::Availiable_lights::secondary_road;
+		road_status[current_road_status][right][destination_of_right] = Traffic_light::Availiable_lights::secondary_road;
+		road_status[anti_current_road_status][left][destination_of_left] = Traffic_light::Availiable_lights::stop_road;
+		road_status[anti_current_road_status][right][destination_of_right] = Traffic_light::Availiable_lights::stop_road;
 		for (size_t j = 0; j < sides[i]->get_lanes().size(); ++j)
 		{
 			shared_ptr<Lane> current_lane = sides[i]->get_lanes()[j];
 			shared_ptr<Lane> current_lane_destination = sides[(i + 3) % expected]->get_lanes()[j];
 			this->lane_connections[current_lane][sides[(i + 3) % expected]] = current_lane_destination;
-			road_status[current_road_status][current_lane][current_lane_destination] = 0;
-			road_status[anti_current_road_status][current_lane][current_lane_destination] = 2;
+			road_status[current_road_status][current_lane][current_lane_destination] = Traffic_light::Availiable_lights::main_road;
+			road_status[anti_current_road_status][current_lane][current_lane_destination] = Traffic_light::Availiable_lights::stop_road;
 		}
 		this->outgoing_sides.push_back(sides[i + 1]);
 		sides[i]->build(this);

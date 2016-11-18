@@ -1,16 +1,16 @@
-#include "traffic_light.hpp"
+#include "cross_road.hpp"
 #include <iostream>
 
 using namespace std;
 
-Traffic_light::Traffic_light(size_t max_status) :
+Cross_road::Traffic_light::Traffic_light(size_t max_status) :
 	max_status(max_status) ,
 	current_status(0) ,
 	max_time(60) ,
 	current_time(0)
 	{}
 
-Traffic_light::Traffic_light(Traffic_light const& copied) :
+Cross_road::Traffic_light::Traffic_light(Traffic_light const& copied) :
 	max_status(copied.max_status) ,
 	current_status(copied.current_status) ,
 	max_time(copied.max_time) ,
@@ -19,7 +19,7 @@ Traffic_light::Traffic_light(Traffic_light const& copied) :
 	road_status = copied.road_status;
 }
 
-Traffic_light::Traffic_light(size_t max_status, std::vector <std::unordered_map <std::shared_ptr<Lane>, std::unordered_map <std::shared_ptr<Lane>, size_t>>> road_status) :
+Cross_road::Traffic_light::Traffic_light(size_t max_status, std::vector <std::unordered_map <std::shared_ptr<Lane>, std::unordered_map <std::shared_ptr<Lane>, Availiable_lights>>> road_status) :
 	max_status(max_status) ,
 	current_status(0) ,
 	max_time(60) ,
@@ -27,7 +27,7 @@ Traffic_light::Traffic_light(size_t max_status, std::vector <std::unordered_map 
 	road_status(road_status)
 	{}
 
-Traffic_light Traffic_light::operator=(Traffic_light const& x)
+Cross_road::Traffic_light Cross_road::Traffic_light::operator=(Traffic_light const& x)
 {
 	max_status = x.max_status;
 	current_status = x.current_status;
@@ -38,14 +38,14 @@ Traffic_light Traffic_light::operator=(Traffic_light const& x)
 }
 
 // 0 - main, 1 - sub, 2 - forbidden.
-vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Traffic_light::get_main_roads()
+vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Cross_road::Traffic_light::get_main_roads()
 {
 	vector <pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> main_roads;
 	for (auto i = road_status[current_status].begin(); i != road_status[current_status].end(); ++i)
 	{
 		for (auto j = i->second.begin(); j != i->second.end(); ++j)
 		{
-			if (j->second == 0)
+			if (j->second == Availiable_lights::main_road)
 			{
 				main_roads.push_back({i->first, j->first});
 			}
@@ -54,14 +54,14 @@ vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Traffic_light::get_
 	return main_roads;
 }
 
-vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Traffic_light::get_active_roads()
+vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Cross_road::Traffic_light::get_active_roads()
 {
 	vector <pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> main_roads;
 	for (auto i = road_status[current_status].begin(); i != road_status[current_status].end(); ++i)
 	{
 		for (auto j = i->second.begin(); j != i->second.end(); ++j)
 		{
-			if (j->second < 2)
+			if (j->second != Availiable_lights::stop_road)
 			{
 				main_roads.push_back({i->first, j->first});
 			}
@@ -70,12 +70,12 @@ vector <pair< std::shared_ptr<Lane>, std::shared_ptr<Lane>>> Traffic_light::get_
 	return main_roads;
 }
 
-int8_t Traffic_light::get_status(std::shared_ptr<Lane> const original_lane, std::shared_ptr<Lane> const new_lane)
+Cross_road::Traffic_light::Availiable_lights Cross_road::Traffic_light::get_status(std::shared_ptr<Lane> const original_lane, std::shared_ptr<Lane> const new_lane)
 {
 	return road_status[current_status][original_lane][new_lane];
 }
 
-void Traffic_light::update()
+void Cross_road::Traffic_light::update()
 {
 	current_time++;
 	if (current_time == max_time)

@@ -17,11 +17,10 @@ Car::Car(vector< std::shared_ptr<Side> > const& path) :
 	{}
 
 Car::Car(Car const& car) :
-	coordinate(car.coordinate),
+	path(car.path) ,
+	coordinate(car.coordinate) ,
 	speed(car.speed)
-{
-	path = car.path;	
-}
+	{}
 
 Car& Car::operator=(Car const& copied)
 {

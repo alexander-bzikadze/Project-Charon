@@ -20,14 +20,3 @@ void Car_generator::update()
 		outgoing_side->add_to_lane(unique_ptr<Car>(new Car(path)), 0);
 	}
 }
-
-bool Car_generator::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
-{
-	//throw something
-	return false;
-}
-
-void Car_generator::go(unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
-{
-	//throw something
-}
