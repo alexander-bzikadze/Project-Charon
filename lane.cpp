@@ -1,5 +1,9 @@
 #include "lane.hpp"
 
+#include <iostream>
+
+using namespace std;
+
 void Lane::update_car(size_t road_length, size_t const recommended_speed, size_t const safe_distance, size_t const index)
 {
 	if (cars.size() == 0)
@@ -19,20 +23,29 @@ void Lane::update_car(size_t road_length, size_t const recommended_speed, size_t
 	}
 }
 
-std::vector<Car*> const& Lane::get_cars() const
+std::vector< unique_ptr<Car> > const& Lane::get_cars() const
 {
 	return cars;
 }
 
-void Lane::add_car(Car* car)
-{
-	cars.push_back(car);
+void Lane::add_car(unique_ptr<Car>&& car)
+{	
+	cars.push_back(std::move(car));
 }
 
-Car* Lane::go_car()
+Car* Lane::go_car(size_t road_length)
 {
-	Car* went_car = cars[0];
-	cars[0]->go();
-	cars.erase(cars.begin(), cars.begin() + 1);
-	return went_car;
+	number_of_cars_to_delete++;
+	auto went_car = move(cars[0]);
+	cars[0] = unique_ptr<Car>(new Car(road_length));
+	return went_car.release();
+}
+
+void Lane::update()
+{
+	if (number_of_cars_to_delete)
+	{
+		cars.erase(cars.begin(), cars.begin() + number_of_cars_to_delete);
+		number_of_cars_to_delete = 0;
+	}
 }

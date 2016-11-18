@@ -17,25 +17,26 @@ public:
 	Cross_road(size_t time_to_cross_crossroad);
 	Cross_road(size_t time_to_cross_crossroad, Traffic_light const& traffic_light);
 
-	bool can_go(Lane* const original_lane, Side* const new_side) override;
+	bool can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side) override;
 
-	void go(Car* car, Lane* original_lane, Side* const new_side) override;
+	void go(std::unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side) override;
 
 	void update() override;
 
-	void standard_build(std::vector<Side*> sides);
+	void standard_build(std::vector< std::shared_ptr<Side> > sides);
 
 private:
 	Traffic_light traffic_light;
 	bool builded;
 
 	// std::vector<Side*> incoming_sides;
-	std::vector<Side*> outgoing_sides;
+	std::vector< std::shared_ptr<Side> > outgoing_sides;
 
-	std::unordered_map<Lane*, size_t> number_of_lanes_in_clock_order;
+	std::unordered_map<std::shared_ptr<Lane>, size_t> number_of_lanes_in_clock_order;
 
-	std::unordered_map<Lane*, std::unordered_map<Side*, Lane*>> lane_connections;
+	std::unordered_map<std::shared_ptr<Lane>, std::unordered_map<std::shared_ptr<Side>, std::shared_ptr<Lane>>> lane_connections;
 
-	std::queue<size_t> number_of_added_cars;
-	std::vector<std::pair<std::pair<Lane*, Lane*>, Car*>> cars_in_crossroad_with_time;
+	std::queue<size_t> number_of_cars_in_cross_road;
+	std::vector< std::unique_ptr<Car> > cars_in_cross_road;
+	std::vector< std::pair<std::shared_ptr<Lane>, std::shared_ptr<Lane>> > cars_in_cross_road_paths;
 };

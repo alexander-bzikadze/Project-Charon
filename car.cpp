@@ -6,19 +6,30 @@
 using namespace std;
 
 Car::Car(size_t coordinate) :
-	coordinate(coordinate)
+	coordinate(coordinate) ,
+	speed(0)
 	{}
 
-Car::Car(vector<Side*> const& path) :
+Car::Car(vector< std::shared_ptr<Side> > const& path) :
 	path(path) ,
-	coordinate(0)
+	coordinate(0) ,
+	speed(0)
 	{}
 
 Car::Car(Car const& car) :
-	path(car.path) ,
 	coordinate(car.coordinate),
 	speed(car.speed)
-	{}
+{
+	path = car.path;	
+}
+
+Car& Car::operator=(Car const& copied)
+{
+	coordinate = copied.coordinate;
+	speed = copied.speed;
+	path = copied.path;
+	return *this;
+}
 
 void Car::update(size_t nearest_barrier_coordinate, 
 		size_t nearest_barrier_speed,
@@ -68,7 +79,7 @@ size_t Car::get_coordinate() const
 	return coordinate;
 }
 
-Side* Car::where_to_go() const
+shared_ptr<Side> Car::where_to_go() const
 {
 	if (path.size() == 0)
 	{
@@ -85,5 +96,6 @@ void Car::go()
 		//throw something
 		return;
 	}
+	coordinate = 0;
 	path.pop_back();
 }
