@@ -24,5 +24,5 @@ public:
 
 private:
 	std::shared_ptr<Side> outgoing_side = nullptr;
-	std::vector< std::shared_ptr<Side> > path;
+	std::shared_ptr<std::vector< std::shared_ptr<Side> >> path;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 #include <memory>
 
 class Side;
@@ -18,7 +19,7 @@ public:
 	Car(size_t coordinate);
 
 	/// Constructor with specified path. Path is used by the car to answer where_to_go method.
-	Car(std::vector< std::shared_ptr<Side> > const& path);
+	Car(std::shared_ptr<std::vector< std::shared_ptr<Side> >> const& path);
 
 	/// Copy-constructor.
 	Car(Car const& car);
@@ -56,7 +57,8 @@ private:
 	constexpr static size_t critical_distance = 1;
 	const size_t car_size = 5;
 
-	std::vector< std::shared_ptr<Side> > path;
+	std::shared_ptr<std::vector< std::shared_ptr<Side> >> path;
+	uint64_t path_to_pass;
 
 	size_t coordinate;
 	size_t speed; // in metres per second

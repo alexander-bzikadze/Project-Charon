@@ -1,6 +1,5 @@
 #include "lane.hpp"
-
-#include <iostream>
+#include "exceptions.hpp"
 
 using namespace std;
 
@@ -35,9 +34,14 @@ void Lane::add_car(unique_ptr<Car>&& car)
 
 Car* Lane::go_car(size_t road_length)
 {
+	if (number_of_cars_to_delete >= cars.size())
+	{
+		throw Model_object_segmentation_fault("No cars to go in Lane");
+	}
+	auto went_car = move(cars[number_of_cars_to_delete]);
+	went_car->where_to_go();
+	cars[number_of_cars_to_delete] = unique_ptr<Car>(new Car(road_length));
 	number_of_cars_to_delete++;
-	auto went_car = move(cars[0]);
-	cars[0] = unique_ptr<Car>(new Car(road_length));
 	return went_car.release();
 }
 

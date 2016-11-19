@@ -10,7 +10,7 @@ Car_generator::Car_generator(std::shared_ptr<Side> outgoing_side) :
 
 Car_generator::Car_generator(std::shared_ptr<Side> outgoing_side, const std::vector< std::shared_ptr<Side> >& path) :
 	outgoing_side(outgoing_side) ,
-	path(path)
+	path((new vector<shared_ptr<Side>>(path)))
 	{}
 
 void Car_generator::update()

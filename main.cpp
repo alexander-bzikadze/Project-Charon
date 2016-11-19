@@ -13,10 +13,10 @@ void t1(), t2(), t3(), t4(),  t5();
 int main()
 {
 	t1();
-	t2();
-	t3();
-	t4();
-	t5();
+	// t2();
+	// t3();
+	// t4();
+	// t5();
 	return 0;
 }
 
@@ -48,7 +48,7 @@ void t5()
 			cr[i]->update();
 		for (int i = 0; i < cd.size(); ++i)
 			cd[i]->update();
-		// s[6]->print();
+		// s[2]->print();
 	}
 }
 
@@ -84,15 +84,15 @@ void t4()
 	cr[1]->standard_build({s[5], s[12], s[6], s[3], s[7], s[1], s[0], s[11]});
 	for (int j = 0; j < 180; ++j)
 	{
-		for (int i = 0; i < 1; ++i)
+		for (int i = 0; i < cg.size(); ++i)
 			cg[i]->update();
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < s.size(); ++i)
 			s[i]->update();
 		for (int i = 0; i < cr.size(); ++i)
 			cr[i]->update();
 		for (int i = 0; i < cd.size(); ++i)
 			cd[i]->update();
-		// s[2]->print();
+		// s[3]->print();
 	}
 }
 
@@ -161,6 +161,7 @@ void t2()
 void t1()
 {
 	auto r = Side(200, 4);
+	r.build(nullptr);
 	std::vector<Car> v;
 	auto p = unique_ptr<Car>(new Car());
 	r.add_to_lane(move(p), 0);

@@ -4,7 +4,9 @@
 #include <memory>
 
 #include "icross_road.hpp"
-#include "side.hpp"
+
+class Lane;
+class Side;
 
 /// Implementation of ICross_road.
 /// Is forced to take cars from sides and to delete them.

@@ -1,4 +1,5 @@
 #include "car_degenerator.hpp"
+#include "exceptions.hpp"
 
 #include <iostream>
 using namespace std;
@@ -12,7 +13,7 @@ bool Car_degenerator::can_go(std::shared_ptr<Lane> original_lane, std::shared_pt
 {
 	if (new_side != nullptr)
 	{
-		//throw something
+		throw Car_is_not_to_be_deleted("Cannot delete car in Car_degenerator as it shall go on living");
 	}
 	return true;
 }
@@ -21,7 +22,7 @@ void Car_degenerator::go(unique_ptr<Car>&& car, std::shared_ptr<Lane> original_l
 {
 	if (new_side != nullptr)
 	{
-		//throw something
+		throw Car_is_not_to_be_deleted("Cannot delete car in Car_degenerator as it shall go on living");
 	}
 	cars_to_delete.push_back(move(car));
 }

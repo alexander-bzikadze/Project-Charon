@@ -1,32 +1,34 @@
-#include <algorithm>
-#include <iostream>
-
 #include "car.hpp"
+#include "exceptions.hpp"
 
 using namespace std;
 
 Car::Car(size_t coordinate) :
+	path_to_pass(0) ,
 	coordinate(coordinate) ,
 	speed(0)
 	{}
 
-Car::Car(vector< std::shared_ptr<Side> > const& path) :
+Car::Car(std::shared_ptr< vector< std::shared_ptr<Side> >> const& path) :
 	path(path) ,
+	path_to_pass(path->size() - 1) ,
 	coordinate(0) ,
 	speed(0)
 	{}
 
 Car::Car(Car const& car) :
 	path(car.path) ,
+	path_to_pass(car.path_to_pass) ,
 	coordinate(car.coordinate) ,
 	speed(car.speed)
 	{}
 
 Car& Car::operator=(Car const& copied)
 {
+	path = copied.path;
+	path_to_pass = copied.path_to_pass;
 	coordinate = copied.coordinate;
 	speed = copied.speed;
-	path = copied.path;
 	return *this;
 }
 
@@ -41,9 +43,8 @@ void Car::update(size_t nearest_barrier_coordinate,
 	{
 		if (speed != 0)
 		{
-			// throw something
+			throw Car_crossed_barrier("Not zero speed but nearest_barrier is less than critical_distance");
 		}
-		return;
 	}
 	size_t passed_distance = 0;
 	size_t previous_speed = speed;
@@ -76,21 +77,27 @@ size_t Car::get_coordinate() const
 
 shared_ptr<Side> Car::where_to_go() const
 {
-	if (path.size() == 0)
+	if (path == nullptr)
 	{
-		//throw something
-		return nullptr;
+		throw Model_object_is_not_built("Car is not built");
 	}
-	return path[path.size() - 1];
+	if (path->size() == 0)
+	{
+		throw Car_path_size_is_not_positive("Car path size is 0 toping back");
+	}
+	return (*path)[path_to_pass];
 }
 
 void Car::go()
 {
-	if (path.size() == 0)
+	if (path == nullptr)
 	{
-		//throw something
-		return;
+		throw Model_object_is_not_built("Car is not built");
+	}
+	if (path->size() == 0)
+	{
+		throw Car_path_size_is_not_positive("Car path size is 0 when poping back");
 	}
 	coordinate = 0;
-	path.pop_back();
+	path_to_pass--;
 }

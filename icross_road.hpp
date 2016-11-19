@@ -1,8 +1,9 @@
 #pragma once
 
 #include "car.hpp"
-#include "lane.hpp"
-#include "side.hpp"
+
+class Lane;
+class Side;
 
 /// Interface of a cross_road. Can be updated, asked, 
 /// if car can cross it, and forced to be crossed by car.

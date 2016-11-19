@@ -1,9 +1,9 @@
 #include <cstdint>
 #include <set>
-
-#include <iostream>
+#include <algorithm>
 
 #include "cross_road.hpp"
+#include "exceptions.hpp"
 
 using namespace std;
 
@@ -24,7 +24,10 @@ bool Cross_road::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Sid
 		return false;
 	}
 	std::shared_ptr<Lane> const new_lane = lane_connections[original_lane][new_side];
-	// int8_t traffic_light_result = 1; // 0 or 2
+	if (find(cars_in_cross_road_paths.begin(), cars_in_cross_road_paths.end(), make_pair(original_lane, new_lane)) != cars_in_cross_road_paths.end())
+	{
+		return false;
+	}
 	if (!new_side->can_add_to_lane(new_lane))
 	{
 		return false;
@@ -88,21 +91,12 @@ void Cross_road::standard_build(vector<std::shared_ptr<Side>> sides)
 	const static size_t expected = 8;
 	if (builded)
 	{
-		//throw something
-		return;
+		Model_object_repeated_build("Repetead build of Cross_road");
 	}
 	if (sides.size() != expected)
 	{
-		//throw something
+		throw Cross_road_unexpected_argument("Expected 8 number of sides in standard_build of Cross_road");
 		return;
-	}
-	for (size_t i = 1; i < sides.size(); ++i)
-	{
-		if (sides[i]->get_lanes().size() != sides[i - 1]->get_lanes().size())
-		{
-			//throw something
-			return;
-		}
 	}
 	size_t max_status = 2;
 	std::vector <std::unordered_map <shared_ptr<Lane>, std::unordered_map <shared_ptr<Lane>, Traffic_light::Availiable_lights>>> road_status;
