@@ -13,19 +13,19 @@ void t1(), t2(), t3(), t4(),  t5();
 int main()
 {
 	t1();
-	// t2();
-	// t3();
-	// t4();
-	// t5();
+	t2();
+	t3();
+	t4();
+	t5();
 	return 0;
 }
 
 void t5()
 {
 	vector< shared_ptr<Car_generator> > cg(4);
-	vector< shared_ptr<Car_degenerator> > cd(4);
 	vector< shared_ptr<Cross_road> > cr(1);
 	vector< shared_ptr<Side> > s(8);
+	vector< shared_ptr<Car_degenerator> > cd(4);
 	for (int i = 0; i < s.size(); ++i)
 	{
 		s[i] = shared_ptr<Side>(new Side(100, 1));

@@ -3,11 +3,11 @@
 #include <vector>
 #include <memory>
 
-#include "icross_road.hpp"
+#include "imodel_object.hpp"
 #include "side.hpp"
 
 /// Generates cars and pushes them to definite side called outgoing.
-class Car_generator
+class Car_generator : IModel_Object
 {
 public:
 	/// Default constructor.
