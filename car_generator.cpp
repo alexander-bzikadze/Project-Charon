@@ -20,3 +20,8 @@ void Car_generator::update()
 		outgoing_side->add_to_lane(unique_ptr<Car>(new Car(path)), 0);
 	}
 }
+
+shared_ptr<Side> const Car_generator::get_outgoing_side() const
+{
+	return outgoing_side;
+}

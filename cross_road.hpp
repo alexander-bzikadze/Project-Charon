@@ -29,6 +29,8 @@ public:
 	/// from each incoming side one may turn to the left of right of go straightly.
 	void standard_build(std::vector< std::shared_ptr<Side> > sides);
 
+	std::vector< std::shared_ptr<Side>> const& get_outgoing_sides() const;
+
 private:
 	class Traffic_light
 	{

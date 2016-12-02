@@ -26,3 +26,8 @@ void Car_degenerator::go(unique_ptr<Car>&& car, std::shared_ptr<Lane> original_l
 	}
 	cars_to_delete.push_back(move(car));
 }
+
+vector< unique_ptr<Car> > const& Car_degenerator::get_cars_to_delete()
+{
+	return cars_to_delete;
+}

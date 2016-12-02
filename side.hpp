@@ -48,6 +48,9 @@ public:
 	/// Returns vector of all lanes by reference.
 	std::vector<std::shared_ptr<Lane>>& get_lanes();
 
+	ICross_road* get_destination() const;
+	size_t get_road_length() const;
+
 private:
 	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;
 	bool builded;

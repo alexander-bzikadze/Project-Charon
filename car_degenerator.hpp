@@ -25,6 +25,8 @@ public:
 	/// Takes car to be stored for update frequency time.
 	void go(std::unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side) override;
 
+	std::vector< std::unique_ptr<Car> > const& get_cars_to_delete();
+
 private:
 	std::vector< std::unique_ptr<Car> > cars_to_delete;
 };

@@ -7,7 +7,7 @@
 #include "side.hpp"
 
 /// Generates cars and pushes them to definite side called outgoing.
-class Car_generator : IModel_Object
+class Car_generator : public IModel_Object
 {
 public:
 	/// Default constructor.
@@ -21,6 +21,8 @@ public:
 
 	/// Updates itself. Generates one car and pushes it to outgoing side.
 	void update();
+
+	std::shared_ptr<Side> const get_outgoing_side() const;
 
 private:
 	std::shared_ptr<Side> outgoing_side = nullptr;
