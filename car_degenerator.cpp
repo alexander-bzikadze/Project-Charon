@@ -9,7 +9,7 @@ void Car_degenerator::update()
 	cars_to_delete.clear();
 }
 
-bool Car_degenerator::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
+bool Car_degenerator::can_go(shared_ptr<Lane> original_lane, shared_ptr<Side> new_side)
 {
 	if (new_side != nullptr)
 	{
@@ -18,13 +18,13 @@ bool Car_degenerator::can_go(std::shared_ptr<Lane> original_lane, std::shared_pt
 	return true;
 }
 
-void Car_degenerator::go(unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side)
+void Car_degenerator::go(unique_ptr<Car>&& car, shared_ptr<Lane> original_lane, shared_ptr<Side> new_side)
 {
 	if (new_side != nullptr)
 	{
 		throw Car_is_not_to_be_deleted("Cannot delete car in Car_degenerator as it shall go on living");
 	}
-	cars_to_delete.push_back(move(car));
+	cars_to_delete.emplace_back(move(car));
 }
 
 vector< unique_ptr<Car> > const& Car_degenerator::get_cars_to_delete()

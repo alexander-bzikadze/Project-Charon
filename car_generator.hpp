@@ -25,6 +25,9 @@ public:
 	std::shared_ptr<Side> const get_outgoing_side() const;
 
 private:
+	constexpr static size_t interval = 30;
+	size_t current_interval = 0;
+
 	std::shared_ptr<Side> outgoing_side = nullptr;
 	std::shared_ptr<std::vector< std::shared_ptr<Side> >> path;
 };

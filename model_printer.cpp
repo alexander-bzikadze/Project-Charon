@@ -31,6 +31,8 @@ void Model_printer::add_all_generators_and_cross_roads()
 		const auto added_graphic_item = model_visualisation->add_circle(cross_road_size, Qt::red);
 		object_and_their_view[printed_model_object.get()] = added_graphic_item;
 	}
+	model_visualisation->disable_crossroad_button();
+	model_visualisation->enable_road_button();
 }
 
 void Model_printer::print_side(shared_ptr<Side> printed_side, shared_ptr<IModel_Object> origin)
@@ -42,8 +44,8 @@ void Model_printer::move_car(shared_ptr<Side> printed_side, shared_ptr<IModel_Ob
 {
 	const auto& origin_point = object_and_their_view[origin.get()]->pos();
 	const auto& dest_point = object_and_their_view[printed_side->get_destination()]->pos();
-	const qreal relation_of_coord_to_side_size = (qreal)printed_side->get_road_length() / (qreal)car_coordinate;
-	const auto& new_point = dest_point - relation_of_coord_to_side_size * origin_point;
+	const qreal relation_of_coord_to_side_size =  (qreal)car_coordinate / (qreal)printed_side->get_road_length();
+	const auto& new_point = (dest_point - origin_point) * relation_of_coord_to_side_size + origin_point + QPointF(cross_road_size / 2, cross_road_size / 2);
 	model_visualisation->move_item(item, new_point);
 }
 
@@ -67,6 +69,8 @@ void Model_printer::add_all_sides()
 	{
 		model_visualisation->fix_item(object_and_their_view[originator_model_object.get()]);
 	}
+	model_visualisation->disable_road_button();
+	model_visualisation->enable_start_button();
 }
 
 void Model_printer::print_cars()
@@ -76,6 +80,7 @@ void Model_printer::print_cars()
 		for (auto const& deleted_car : degenerator->get_cars_to_delete())
 		{
 			model_visualisation->delete_item(cars_view[hash<unique_ptr<Car>>()(deleted_car)]);
+			cars_view.erase(hash<unique_ptr<Car>>()(deleted_car));
 		}
 	}	
 	for (const auto& generator : car_generators)
