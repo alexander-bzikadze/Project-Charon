@@ -14,20 +14,40 @@ Model::Model(vector<shared_ptr<Side>>& sides,
 
 void Model::update()
 {	
-	for (auto& x : car_degenerators)
+	for (shared_ptr<IModel_Object> x : car_degenerators)
 	{
 		x->update();
 	}
-	for (auto& x : car_generators)
+	for (shared_ptr<IModel_Object> x : car_generators)
 	{
 		x->update();
 	}
-	for (auto& x : sides)
+	for (shared_ptr<IModel_Object> x : sides)
 	{
 		x->update();
 	}
-	for (auto& x : cross_roads)
+	for (shared_ptr<IModel_Object> x : cross_roads)
 	{
 		x->update();
 	}
+}
+
+vector<shared_ptr<Side>> const& Model::get_sides() const
+{
+	return sides;
+}
+
+vector<shared_ptr<Car_generator>> const& Model::get_car_generators() const
+{
+	return car_generators;
+}
+
+vector<shared_ptr<Cross_road>> const& Model::get_cross_roads() const
+{
+	return cross_roads;
+}
+
+vector<shared_ptr<Car_degenerator>> const& Model::get_car_degenerators() const
+{
+	return car_degenerators;
 }

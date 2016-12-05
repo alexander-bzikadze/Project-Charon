@@ -23,12 +23,14 @@ public:
 
 	void go(std::unique_ptr<Car>&& car, std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side) override;
 
+	/// Updates cars that are currently in cross_road.
 	void update() override;
 
 	/// Takes 8 sized vector of sides and builds standart crossroad:
 	/// from each incoming side one may turn to the left of right of go straightly.
 	void standard_build(std::vector< std::shared_ptr<Side> > sides);
 
+	/// Get sides that take origin at current cross_road.
 	std::vector< std::shared_ptr<Side>> const& get_outgoing_sides() const;
 
 private:

@@ -22,6 +22,7 @@ public:
 	/// Updates itself. Generates one car and pushes it to outgoing side.
 	void update();
 
+	/// Returns pointer to the side which cars are added to by update().
 	std::shared_ptr<Side> const get_outgoing_side() const;
 
 private:

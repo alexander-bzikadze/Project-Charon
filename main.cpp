@@ -45,12 +45,9 @@ int t6(int argc, char* argv[])
 	QApplication a(argc, argv);
 	shared_ptr<Model_visualisation> w(new Model_visualisation());
 	w->show();
-	Model md(s,cg,cr,cd);
-	Model_printer mp(w, cg, cr, cd);
-	Model_timer mt(&md, &mp);
-	QObject::connect(w.get(), SIGNAL(add_crossroads()), &mp, SLOT(add_all_generators_and_cross_roads()));
-	QObject::connect(w.get(), SIGNAL(add_sides()), &mp, SLOT(add_all_sides()));
-	QObject::connect(w.get(), SIGNAL(change_activity()), &mt, SLOT(change_activity()));
+	shared_ptr<Model> md(new Model(s,cg,cr,cd));
+	shared_ptr<Model_printer> mp(new Model_printer(w, md));
+	shared_ptr<Model_timer> mt(new Model_timer(md, mp, w));
 	return a.exec();
 }
 

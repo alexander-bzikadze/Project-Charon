@@ -5,28 +5,27 @@
 using namespace std;
 
 Model_printer::	Model_printer(std::shared_ptr<Model_visualisation> model_visualisation,
-				  std::vector< std::shared_ptr<Car_generator> >& car_generators,
-				  std::vector< std::shared_ptr<Cross_road> >& cross_roads,
-				  std::vector< std::shared_ptr<Car_degenerator> >& car_degenerators) :
-				  model_visualisation(model_visualisation) ,
-				  car_generators(car_generators) ,
-				  cross_roads(cross_roads) ,
-				  car_degenerators(car_degenerators)
-	{}
+							shared_ptr<Model> model) :
+	model_visualisation(model_visualisation) ,
+	model(model)
+{
+	connect(model_visualisation.get(), SIGNAL(add_crossroads()), this, SLOT(add_all_generators_and_cross_roads()));
+	connect(model_visualisation.get(), SIGNAL(add_sides()), this, SLOT(add_all_sides()));
+}
 
 void Model_printer::add_all_generators_and_cross_roads()
 {
-	for (const auto& printed_model_object : car_generators)
+	for (const auto& printed_model_object : model->get_car_generators())
 	{
 		const auto added_graphic_item = model_visualisation->add_circle(cross_road_size, Qt::green);
 		object_and_their_view[printed_model_object.get()] = added_graphic_item;
 	}
-	for (auto const& printed_model_object : cross_roads)
+	for (auto const& printed_model_object : model->get_cross_roads())
 	{
 		const auto added_graphic_item = model_visualisation->add_circle(cross_road_size, Qt::cyan);
 		object_and_their_view[printed_model_object.get()] = added_graphic_item;
 	}
-	for (auto const& printed_model_object : car_degenerators)
+	for (auto const& printed_model_object : model->get_car_degenerators())
 	{
 		const auto added_graphic_item = model_visualisation->add_circle(cross_road_size, Qt::red);
 		object_and_their_view[printed_model_object.get()] = added_graphic_item;
@@ -51,13 +50,13 @@ void Model_printer::move_car(shared_ptr<Side> printed_side, shared_ptr<IModel_Ob
 
 void Model_printer::add_all_sides()
 {
-	for (const auto& originator_model_object : car_generators)
+	for (const auto& originator_model_object : model->get_car_generators())
 	{
 		const auto printed_side = originator_model_object->get_outgoing_side();
 		print_side(printed_side, originator_model_object);
 		model_visualisation->fix_item(object_and_their_view[originator_model_object.get()]);
 	}
-	for (auto const& originator_model_object : cross_roads)
+	for (auto const& originator_model_object : model->get_cross_roads())
 	{
 		for (auto const& printed_side : originator_model_object->get_outgoing_sides())
 		{
@@ -65,7 +64,7 @@ void Model_printer::add_all_sides()
 		}
 		model_visualisation->fix_item(object_and_their_view[originator_model_object.get()]);
 	}
-	for (auto const& originator_model_object : car_degenerators)
+	for (auto const& originator_model_object : model->get_car_degenerators())
 	{
 		model_visualisation->fix_item(object_and_their_view[originator_model_object.get()]);
 	}
@@ -75,7 +74,7 @@ void Model_printer::add_all_sides()
 
 void Model_printer::print_cars()
 {
-	for (auto const& degenerator : car_degenerators)
+	for (auto const& degenerator : model->get_car_degenerators())
 	{
 		for (auto const& deleted_car : degenerator->get_cars_to_delete())
 		{
@@ -83,7 +82,7 @@ void Model_printer::print_cars()
 			cars_view.erase(hash<unique_ptr<Car>>()(deleted_car));
 		}
 	}	
-	for (const auto& generator : car_generators)
+	for (const auto& generator : model->get_car_generators())
 	{
 		const auto updated_side = generator->get_outgoing_side();
 		for (auto const& updated_lane : updated_side->get_lanes())
@@ -98,7 +97,7 @@ void Model_printer::print_cars()
 			}
 		}
 	}
-	for (auto const& cross_road : cross_roads)
+	for (auto const& cross_road : model->get_cross_roads())
 	{
 		for (auto const& updated_side : cross_road->get_outgoing_sides())
 		{

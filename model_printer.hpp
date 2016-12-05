@@ -5,24 +5,25 @@
 #include <QGraphicsItem>
 
 #include "model_visualisation.hpp"
-#include "side.hpp"
-#include "cross_road.hpp"
-#include "car_generator.hpp"
-#include "car_degenerator.hpp"
+#include "model.hpp"
 
+/// Class that prints Model.
 class Model_printer : public QObject
 {
 	Q_OBJECT
 public:
 	Model_printer(std::shared_ptr<Model_visualisation> model_visualisation,
-				  std::vector< std::shared_ptr<Car_generator> >& car_generators,
-				  std::vector< std::shared_ptr<Cross_road> >& cross_roads,
-				  std::vector< std::shared_ptr<Car_degenerator> >& car_degenerators);
+				  std::shared_ptr<Model> model);
 
 
 public slots:
+	/// Adds all cross_roads, generators and degenerators to model_visualisation.
 	void add_all_generators_and_cross_roads();
+
+	/// Adds all sides between cross_roads, generators and degenerators to model_visualisation.
 	void add_all_sides();
+
+	/// Updates cars view in model_visualisation.
 	void print_cars();
 
 
@@ -35,9 +36,7 @@ private:
 
 	std::shared_ptr<Model_visualisation> model_visualisation;
 
-	std::vector< std::shared_ptr<Car_generator> >& car_generators;
-	std::vector< std::shared_ptr<Cross_road> >& cross_roads;
-	std::vector< std::shared_ptr<Car_degenerator> >& car_degenerators;
+	std::shared_ptr<Model> model;
 
 	std::unordered_map<IModel_Object*, QGraphicsItem*> object_and_their_view;
 	std::unordered_map< size_t, QGraphicsItem* > cars_view;
