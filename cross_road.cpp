@@ -222,3 +222,8 @@ void Cross_road::Traffic_light::update()
 		}
 	}
 }
+
+std::vector< std::shared_ptr<Side>> const& Cross_road::get_outgoing_sides() const
+{
+	return outgoing_sides;
+}

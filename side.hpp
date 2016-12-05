@@ -5,6 +5,7 @@
 
 #include "lane.hpp"
 #include "car.hpp"
+#include "imodel_object.hpp"
 
 class ICross_road;
 
@@ -12,7 +13,7 @@ class ICross_road;
 /// Basic meaning is one-sided road with n lanes. Two sides make a two-sided road.
 /// Holds its lanes, length, recommeded_speed and safe_distance.
 /// Also has pointer to its final destiantion - ICross_road.
-class Side
+class Side : public IModel_Object
 {
 public:
 	/// Default constructor.
@@ -47,6 +48,9 @@ public:
 
 	/// Returns vector of all lanes by reference.
 	std::vector<std::shared_ptr<Lane>>& get_lanes();
+
+	ICross_road* get_destination() const;
+	size_t get_road_length() const;
 
 private:
 	bool can_switch_lanes(size_t lane_number, size_t car_number, size_t new_lane_number) const;

@@ -182,3 +182,13 @@ void Side::build(ICross_road* destination)
 // 	}
 // 	return true;
 // }
+
+ICross_road* Side::get_destination() const
+{
+	return destination;
+}
+
+size_t Side::get_road_length() const
+{
+	return road_length;
+}

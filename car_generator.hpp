@@ -3,11 +3,11 @@
 #include <vector>
 #include <memory>
 
-#include "icross_road.hpp"
+#include "imodel_object.hpp"
 #include "side.hpp"
 
 /// Generates cars and pushes them to definite side called outgoing.
-class Car_generator
+class Car_generator : public IModel_Object
 {
 public:
 	/// Default constructor.
@@ -22,7 +22,13 @@ public:
 	/// Updates itself. Generates one car and pushes it to outgoing side.
 	void update();
 
+	/// Returns pointer to the side which cars are added to by update().
+	std::shared_ptr<Side> const get_outgoing_side() const;
+
 private:
+	constexpr static size_t interval = 30;
+	size_t current_interval = 0;
+
 	std::shared_ptr<Side> outgoing_side = nullptr;
 	std::shared_ptr<std::vector< std::shared_ptr<Side> >> path;
 };

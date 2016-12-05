@@ -1,31 +1,62 @@
-#include "lane.hpp"
 #include "side.hpp"
 #include "cross_road.hpp"
 #include "car_generator.hpp"
 #include "car_degenerator.hpp"
+#include "model_visualisation.hpp"
+#include "model_printer.hpp"
+#include "model_timer.hpp"
 
 #include <iostream>
+#include <QApplication>
 
 using namespace std;
 
 void t1(), t2(), t3(), t4(),  t5();
+int t6(int argc, char* argv[]);
 
-int main()
+int main(int argc, char* argv[])
 {
-	t1();
+	// t1();
 	// t2();
 	// t3();
 	// t4();
 	// t5();
-	return 0;
+	return t6(argc, argv);
+}
+
+int t6(int argc, char* argv[])
+{
+	vector< shared_ptr<Car_generator> > cg(4);
+	vector< shared_ptr<Cross_road> > cr(1);
+	vector< shared_ptr<Side> > s(8);
+	vector< shared_ptr<Car_degenerator> > cd(4);
+	for (int i = 0; i < s.size(); ++i)
+	{
+		s[i] = shared_ptr<Side>(new Side(3000, 1));
+	}
+	for (int i = 0; i < cg.size(); ++i)
+	{
+		cg[i] = shared_ptr<Car_generator>(new Car_generator(s[i], {nullptr, s[i + 4]}));
+		cd[i] = shared_ptr<Car_degenerator>(new Car_degenerator());
+		s[i + 4]->build(cd[i].get());
+	}
+	cr[0] = shared_ptr<Cross_road>(new Cross_road(3));
+	cr[0]->standard_build({s[0], s[4], s[1], s[5], s[2], s[6], s[3], s[7]});
+	QApplication a(argc, argv);
+	shared_ptr<Model_visualisation> w(new Model_visualisation());
+	w->show();
+	shared_ptr<Model> md(new Model(s,cg,cr,cd));
+	shared_ptr<Model_printer> mp(new Model_printer(w, md));
+	shared_ptr<Model_timer> mt(new Model_timer(md, mp, w));
+	return a.exec();
 }
 
 void t5()
 {
 	vector< shared_ptr<Car_generator> > cg(4);
-	vector< shared_ptr<Car_degenerator> > cd(4);
 	vector< shared_ptr<Cross_road> > cr(1);
 	vector< shared_ptr<Side> > s(8);
+	vector< shared_ptr<Car_degenerator> > cd(4);
 	for (int i = 0; i < s.size(); ++i)
 	{
 		s[i] = shared_ptr<Side>(new Side(100, 1));
@@ -160,6 +191,7 @@ void t2()
 
 void t1()
 {
+
 	auto r = Side(200, 4);
 	r.build(nullptr);
 	std::vector<Car> v;
