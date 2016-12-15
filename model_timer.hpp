@@ -24,7 +24,7 @@ public slots:
 	void change_activity();
 
 private:
-	constexpr static int interval = 40;
+	constexpr static int interval = 500;
 
 	QTimer timer;
 };

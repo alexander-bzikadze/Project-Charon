@@ -41,10 +41,12 @@ void Model_printer::print_side(shared_ptr<Side> printed_side, shared_ptr<IModel_
 
 void Model_printer::move_car(shared_ptr<Side> printed_side, shared_ptr<IModel_Object> origin, size_t car_coordinate, QGraphicsItem* item)
 {
-	const auto& origin_point = object_and_their_view[origin.get()]->pos();
-	const auto& dest_point = object_and_their_view[printed_side->get_destination()]->pos();
+	auto origin_point = object_and_their_view[origin.get()]->pos();
+	auto dest_point = object_and_their_view[printed_side->get_destination()]->pos();
+	origin_point += QPointF(cross_road_size * cos(origin_point, dest_point), cross_road_size * sin(origin_point, dest_point));
+	dest_point -= QPointF(cross_road_size * cos(origin_point, dest_point), cross_road_size * sin(origin_point, dest_point));
 	const qreal relation_of_coord_to_side_size =  (qreal)car_coordinate / (qreal)printed_side->get_road_length();
-	const auto& new_point = (dest_point - origin_point) * relation_of_coord_to_side_size + origin_point + QPointF(cross_road_size / 2, cross_road_size / 2);
+	auto new_point = (dest_point - origin_point) * relation_of_coord_to_side_size + origin_point + QPointF(cross_road_size / 2, cross_road_size / 2) - QPointF(car_size / 2, car_size / 2);
 	model_visualisation->move_item(item, new_point);
 }
 
@@ -114,4 +116,19 @@ void Model_printer::print_cars()
 			}
 		}
 	}
+}
+
+qreal Model_printer::length(QPointF const& p1, QPointF const& p2)
+{
+	return sqrt(p2.y() * p1.y() + p2.x() * p1.x());
+}
+
+qreal Model_printer::sin(QPointF const& p1, QPointF const& p2)
+{
+	return (p2.y() - p1.y()) / length(p1, p2);
+}
+
+qreal Model_printer::cos(QPointF const& p1, QPointF const& p2)
+{
+	return (p2.x() - p1.x()) / length(p1, p2);
 }

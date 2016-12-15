@@ -21,14 +21,14 @@ public:
 	/// Constructor with specified path. Path is used by the car to answer where_to_go method.
 	Car(std::shared_ptr<std::vector< std::shared_ptr<Side> >> const& path);
 
-	/// Copy-constructor.
-	Car(Car const& car);
+	// /// Copy-constructor.
+	// Car(Car const& car);
 
 	/// Default destructor.
 	~Car() = default;
 
-	/// = Operator.
-	Car& operator=(Car const& copied);
+	// /// = Operator.
+	// Car& operator=(Car const& copied);
 
 	/// Changes current coordinate of the car depending on neareast barrier coordinate, 
 	/// nearest barrier speed, update frequency, recommended speed and safe distance.

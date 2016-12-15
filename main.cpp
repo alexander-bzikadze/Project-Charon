@@ -5,6 +5,7 @@
 #include "model_visualisation.hpp"
 #include "model_printer.hpp"
 #include "model_timer.hpp"
+#include "model_analyzer.hpp"
 
 #include <iostream>
 #include <QApplication>
@@ -12,7 +13,7 @@
 using namespace std;
 
 void t1(), t2(), t3(), t4(),  t5();
-int t6(int argc, char* argv[]);
+int t6(int argc, char* argv[]), t7(int argc, char* argv[]);
 
 int main(int argc, char* argv[])
 {
@@ -21,8 +22,48 @@ int main(int argc, char* argv[])
 	// t3();
 	// t4();
 	// t5();
-	return t6(argc, argv);
+	// return t6(argc, argv);
+	return t7(argc, argv);
 }
+
+int t7(int argc, char* argv[])
+{
+	vector< shared_ptr<Car_generator> > cg(9);
+	vector< shared_ptr<Cross_road> > cr(3);
+	vector< shared_ptr<Side> > s(21);
+	vector< shared_ptr<Car_degenerator> > cd(9);
+	for (size_t i = 0; i < s.size(); ++i)
+	{
+		s[i] = shared_ptr<Side>(new Side(100, 1));
+	}
+	vector<shared_ptr<Side>> path[9] = {};
+	path[0] = {nullptr, s[12], s[18]};
+	path[1] = {nullptr, s[11]};
+	path[2] = {nullptr, s[9]};
+	path[3] = {nullptr, s[15], s[19]};
+	path[4] = {nullptr, s[14]};
+	path[5] = {nullptr, s[12]};
+	path[6] = {nullptr, s[9], s[20]};
+	path[7] = {nullptr, s[17]};
+	path[8] = {nullptr, s[15]};
+	for (size_t i = 0; i < cg.size(); ++i)
+	{
+		cg[i] =  shared_ptr<Car_generator>(new Car_generator(s[i], path[i]));
+		cd[i] = shared_ptr<Car_degenerator>(new Car_degenerator());
+		s[i + 9]->build(cd[i].get());
+	}
+	for (size_t i = 0; i < cr.size(); ++i)
+	{
+		cr[i] = shared_ptr<Cross_road>(new Cross_road(2));
+		cr[i]->standard_build({s[(20 + i - 3 * (i > 0))], s[9 + 3*i], s[0 + 3*i], s[10 + 3*i], s[1 + 3*i], s[11 + 3*i], s[2 + 3*i], s[18 + i]});
+	}
+	QApplication a(argc, argv);
+	shared_ptr<Model_visualisation> w(new Model_visualisation());
+	w->show();
+	shared_ptr<Model> md(new Model(s,cg,cr,cd));
+	shared_ptr<Model_printer> mp(new Model_printer(w, md));
+	shared_ptr<Model_timer> mt(new Model_timer(md, mp, w));
+	return a.exec();}
 
 int t6(int argc, char* argv[])
 {
@@ -32,7 +73,7 @@ int t6(int argc, char* argv[])
 	vector< shared_ptr<Car_degenerator> > cd(4);
 	for (int i = 0; i < s.size(); ++i)
 	{
-		s[i] = shared_ptr<Side>(new Side(3000, 1));
+		s[i] = shared_ptr<Side>(new Side(30, 1));
 	}
 	for (int i = 0; i < cg.size(); ++i)
 	{

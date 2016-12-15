@@ -5,9 +5,12 @@
 #include "cross_road.hpp"
 #include "exceptions.hpp"
 
+#include <iostream>
+
 using namespace std;
 
-Cross_road::Cross_road(size_t time_to_cross_crossroad) :
+Cross_road::Cross_road(size_t time_to_cross_crossroad, unique_ptr<ITraffic_light>&& traffic_light) :
+	traffic_light(move(traffic_light)) ,
 	builded(false)
 {
 	for (size_t i = 0; i < time_to_cross_crossroad; ++i)
@@ -32,10 +35,10 @@ bool Cross_road::can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Sid
 	{
 		return false;
 	}
-	Traffic_light::Availiable_lights traffic_light_result = traffic_light.get_status(original_lane, new_lane);
+	Traffic_light::Availiable_lights traffic_light_result = traffic_light->get_status(original_lane, new_lane);
 	if (traffic_light_result == Traffic_light::Availiable_lights::secondary_road)
 	{
-		std::vector<std::pair<std::shared_ptr<Lane>, std::shared_ptr<Lane>>> const main_roads = traffic_light.get_active_roads();
+		std::vector<std::pair<std::shared_ptr<Lane>, std::shared_ptr<Lane>>> const main_roads = traffic_light->get_active_roads();
 		// std::vector<std::pair<Lane*, Lane*>> const main_roads;
 		std::set<std::pair<std::shared_ptr<Lane>, std::shared_ptr<Lane>>> crossed_roads;
 		for (auto x : main_roads)
@@ -83,7 +86,7 @@ void Cross_road::update()
 	}
 	cars_in_cross_road.erase(cars_in_cross_road.begin(), cars_in_cross_road.begin() + number_of_cars_to_delete);
 	cars_in_cross_road_paths.erase(cars_in_cross_road_paths.begin(), cars_in_cross_road_paths.begin() + number_of_cars_to_delete);
-	traffic_light.update();
+	traffic_light->update();
 }
 
 void Cross_road::standard_build(vector<std::shared_ptr<Side>> sides)
@@ -134,7 +137,7 @@ void Cross_road::standard_build(vector<std::shared_ptr<Side>> sides)
 			this->number_of_lanes_in_clock_order[sides[i]->get_lanes()[j]] = added_lanes++;
 		}
 	}
-	this->traffic_light = Traffic_light(max_status, road_status);
+	this->traffic_light.reset(new Traffic_light(max_status, road_status));
 }
 
 Cross_road::Traffic_light::Traffic_light(size_t max_status) :
@@ -226,4 +229,9 @@ void Cross_road::Traffic_light::update()
 std::vector< std::shared_ptr<Side>> const& Cross_road::get_outgoing_sides() const
 {
 	return outgoing_sides;
+}
+
+vector<unique_ptr<Car>> const& Cross_road::get_cars_in_cross_road()
+{
+	return cars_in_cross_road;
 }

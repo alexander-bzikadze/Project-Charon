@@ -16,21 +16,21 @@ Car::Car(std::shared_ptr< vector< std::shared_ptr<Side> >> const& path) :
 	speed(0)
 	{}
 
-Car::Car(Car const& car) :
-	path(car.path) ,
-	path_to_pass(car.path_to_pass) ,
-	coordinate(car.coordinate) ,
-	speed(car.speed)
-	{}
+// Car::Car(Car const& car) :
+// 	path(car.path) ,
+// 	path_to_pass(car.path_to_pass) ,
+// 	coordinate(car.coordinate) ,
+// 	speed(car.speed)
+// 	{}
 
-Car& Car::operator=(Car const& copied)
-{
-	path = copied.path;
-	path_to_pass = copied.path_to_pass;
-	coordinate = copied.coordinate;
-	speed = copied.speed;
-	return *this;
-}
+// Car& Car::operator=(Car const& copied)
+// {
+// 	path = copied.path;
+// 	path_to_pass = copied.path_to_pass;
+// 	coordinate = copied.coordinate;
+// 	speed = copied.speed;
+// 	return *this;
+// }
 
 void Car::update(size_t nearest_barrier_coordinate, 
 		size_t nearest_barrier_speed,
@@ -101,3 +101,4 @@ void Car::go()
 	coordinate = 0;
 	path_to_pass--;
 }
+

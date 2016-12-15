@@ -10,6 +10,8 @@
 #include "lane.hpp"
 #include "car.hpp"
 
+#include "itraffic_light.hpp"
+
 /// Standart implementation of ICross_road.
 /// Besides ICross_road methodes, can be builded.
 /// It is invaled to use ICross_road when its not builed.
@@ -17,7 +19,7 @@ class Cross_road : public ICross_road
 {
 public:
 	Cross_road() = default;
-	Cross_road(size_t time_to_cross_crossroad);
+	Cross_road(size_t time_to_cross_crossroad, std::unique_ptr<ITraffic_light>&& traffic_light = nullptr);
 
 	bool can_go(std::shared_ptr<Lane> original_lane, std::shared_ptr<Side> new_side) override;
 
@@ -33,11 +35,12 @@ public:
 	/// Get sides that take origin at current cross_road.
 	std::vector< std::shared_ptr<Side>> const& get_outgoing_sides() const;
 
+	std::vector<std::unique_ptr<Car>> const& get_cars_in_cross_road();
+
 private:
-	class Traffic_light
+	class Traffic_light : public ITraffic_light
 	{
 	public:
-		enum class Availiable_lights : std::uint8_t { main_road, secondary_road, stop_road };
 		Traffic_light() = default;
 		Traffic_light(size_t max_status);
 		Traffic_light(size_t max_status, std::vector <std::unordered_map <std::shared_ptr<Lane>, std::unordered_map <std::shared_ptr<Lane>, Availiable_lights>>> road_status);
@@ -45,11 +48,10 @@ private:
 		Traffic_light operator=(Traffic_light const& x);
 
 
-		std::vector< std::pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> get_main_roads();
-		std::vector< std::pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> get_active_roads();
-		Availiable_lights get_status(std::shared_ptr<Lane> const original_lane, std::shared_ptr<Lane> const new_lane);
-		void update();
-
+		std::vector< std::pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> get_main_roads() override;
+		std::vector< std::pair <std::shared_ptr<Lane>, std::shared_ptr<Lane>>> get_active_roads() override;
+		Availiable_lights get_status(std::shared_ptr<Lane> const original_lane, std::shared_ptr<Lane> const new_lane) override;
+		void update() override;
 
 	private:
 		size_t max_status = 0;
@@ -60,7 +62,7 @@ private:
 		std::vector <std::unordered_map <std::shared_ptr<Lane>, std::unordered_map <std::shared_ptr<Lane>, Availiable_lights>>> road_status;
 	};
 
-	Traffic_light traffic_light;
+	std::unique_ptr<ITraffic_light> traffic_light;
 	bool builded;
 
 	// std::vector<Side*> incoming_sides;

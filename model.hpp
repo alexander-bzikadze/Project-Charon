@@ -26,6 +26,10 @@ public:
 	std::vector< std::shared_ptr<Cross_road> > const& get_cross_roads() const;
 	std::vector< std::shared_ptr<Car_degenerator> > const& get_car_degenerators() const;
 
+	void call_event_car_added(Car* car_pointer);
+
+signals:
+	void event_car_added(Car* car);
 
 public slots:
 	void update();
@@ -35,4 +39,7 @@ private:
 	std::vector< std::shared_ptr<Car_generator> >& car_generators;
 	std::vector< std::shared_ptr<Cross_road> >& cross_roads;
 	std::vector< std::shared_ptr<Car_degenerator> >& car_degenerators;
+
+	uint64_t current_number_of_cars = 0;
+	uint64_t sum_of_cars_in_period = 0;
 };

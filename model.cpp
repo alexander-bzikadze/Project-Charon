@@ -10,25 +10,25 @@ Model::Model(vector<shared_ptr<Side>>& sides,
 	car_generators(car_generators) ,
 	cross_roads(cross_roads) ,
 	car_degenerators(car_degenerators)
-	{}
+{}
 
 void Model::update()
 {	
-	for (shared_ptr<IModel_Object> x : car_degenerators)
+	for (auto car_degenerator : car_degenerators)
 	{
-		x->update();
+		car_degenerator->update();
+	}	
+	for (auto car_generator : car_generators)
+	{
+		car_generator->update();
 	}
-	for (shared_ptr<IModel_Object> x : car_generators)
+	for (auto side : sides)
 	{
-		x->update();
+		side->update();
 	}
-	for (shared_ptr<IModel_Object> x : sides)
+	for (auto cross_road : cross_roads)
 	{
-		x->update();
-	}
-	for (shared_ptr<IModel_Object> x : cross_roads)
-	{
-		x->update();
+		cross_road->update();
 	}
 }
 
@@ -50,4 +50,9 @@ vector<shared_ptr<Cross_road>> const& Model::get_cross_roads() const
 vector<shared_ptr<Car_degenerator>> const& Model::get_car_degenerators() const
 {
 	return car_degenerators;
+}
+
+void Model::call_event_car_added(Car* car_pointer)
+{
+	emit event_car_added(car_pointer);
 }

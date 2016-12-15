@@ -31,6 +31,10 @@ private:
 	constexpr static qreal cross_road_size = 50;
 	constexpr static qreal car_size = 10;
 
+	static qreal length(QPointF const& p1, QPointF const& p2);
+	static qreal sin(QPointF const& p1, QPointF const& p2);
+	static qreal cos(QPointF const& p1, QPointF const& p2);
+
 	void print_side(std::shared_ptr<Side> printed_side, std::shared_ptr<IModel_Object> origin);
 	void move_car(std::shared_ptr<Side> printed_side, std::shared_ptr<IModel_Object> origin, size_t car_coordinate, QGraphicsItem* item);
 

@@ -66,7 +66,6 @@ void Model_visualisation::move_item(QGraphicsItem* item, QPointF const& new_poin
 void Model_visualisation::delete_item(QGraphicsItem* item)
 {
 	mScene.removeItem(item);
-	cout << mScene.items().length() << endl;
 	delete item;
 }
 

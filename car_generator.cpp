@@ -16,10 +16,13 @@ Car_generator::Car_generator(std::shared_ptr<Side> outgoing_side, const std::vec
 void Car_generator::update()
 {
 	current_interval++;
-	if (current_interval == interval && outgoing_side->can_add_to_lane(0))
+	if (current_interval == interval)
 	{
 		current_interval = 0;
-		outgoing_side->add_to_lane(unique_ptr<Car>(new Car(path)), 0);
+		if (outgoing_side->can_add_to_lane(0))
+		{
+			outgoing_side->add_to_lane(unique_ptr<Car>(new Car(path)), 0);
+		}
 	}
 }
 
